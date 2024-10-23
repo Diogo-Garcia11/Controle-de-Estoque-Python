@@ -40,12 +40,12 @@ class Conexao:
         CURSOR.close()
         print("Dados Cadastrados com sucesso no banco de dados.")
 
-    def atualizar_prod(prod_nome, prod_categoria, prod_quantidade, prod_preco, prod_validade):
+    def atualizar_produto(prod_nome, prod_categoria, prod_quantidade, prod_preco, prod_validade, prod_id):
         CONEXAO = Conexao.Dados()
         CURSOR = CONEXAO.cursor()
         CURSOR.execute("""
-            UPDATE Produtos SET nome = %s, categoria = %s, quantidade_estoque = %s, preco = %s, data_validade = %s
-        """, (prod_nome, prod_categoria, prod_quantidade, prod_preco, prod_validade))
+            UPDATE Produtos SET nome = %s, categoria = %s, quantidade_estoque = %s, preco = %s, data_validade = %s WHERE id_produto = %s
+        """, (prod_nome, prod_categoria, prod_quantidade, prod_preco, prod_validade,prod_id))
         CONEXAO.commit()
         CURSOR.close()
         print("Dados atualizados com sucesso no banco de dados.")
@@ -54,7 +54,7 @@ class Conexao:
         CONEXAO = Conexao.Dados()
         CURSOR = CONEXAO.cursor()
         CURSOR.execute("""
-            SELECT * FROM Produtos WHERE nome = %s OR categoria OR preco = %s
+            SELECT * FROM Produtos WHERE nome LIKE %s OR categoria = %s OR preco = %s
         """, (prod_nome,prod_categoria,prod_preco))
         resultado = CURSOR.fetchall()
         CURSOR.close()
@@ -76,7 +76,7 @@ class Conexao:
         CONEXAO = Conexao.Dados()
         CURSOR = CONEXAO.cursor()
         CURSOR.execute("""
-            DELETE FROM Produto WHERE id_produto = %s
+            DELETE FROM Produtos WHERE id_produto = %s
         """, (prod_id,))
         CONEXAO.commit()
         CURSOR.close()
